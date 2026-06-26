@@ -1,0 +1,8 @@
+{
+  "appId": "com.salihyasins.hikmah",
+  "appName": "Hikmah Academy",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

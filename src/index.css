@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Default Theme: Emerald Heritage (Perfect high-contrast light theme) */
+  --primary-color: #003527;
+  --secondary-color: #fe932c;
+  --secondary-container-color: #e6f0ed;
+  --on-secondary-container-color: #002d21;
+  --app-bg-color: #FDFCFB;
+  --card-bg-color: #ffffff;
+  --text-main-color: #111827;
+  --text-muted-color: #4b5563;
+  --border-color: #e5e7eb;
+}
+
+:root.theme-saffron {
+  /* Abyssinian Saffron Theme (Warm Gold & Saffron) */
+  --primary-color: #7c2d12;
+  --secondary-color: #ea580c;
+  --secondary-container-color: #ffedd5;
+  --on-secondary-container-color: #431407;
+  --app-bg-color: #fdfaf6;
+  --card-bg-color: #ffffff;
+  --text-main-color: #1f2937;
+  --text-muted-color: #4b5563;
+  --border-color: #f3f4f6;
+}
+
+:root.theme-blue {
+  /* Royal Ge'ez Theme (Sapphire Blue & Saffron Gold) */
+  --primary-color: #1e3a8a;
+  --secondary-color: #eab308;
+  --secondary-container-color: #dbeafe;
+  --on-secondary-container-color: #1e1b4b;
+  --app-bg-color: #f8fafc;
+  --card-bg-color: #ffffff;
+  --text-main-color: #0f172a;
+  --text-muted-color: #475569;
+  --border-color: #e2e8f0;
+}
+
+:root.theme-dark {
+  /* Cosmic Charcoal Theme (Stunning dark mode with mint/saffron) */
+  --primary-color: #10b981;
+  --secondary-color: #fb923c;
+  --secondary-container-color: #1f2937;
+  --on-secondary-container-color: #f9fafb;
+  --app-bg-color: #0b0f19;
+  --card-bg-color: #161e2e;
+  --text-main-color: #f3f4f6;
+  --text-muted-color: #9ca3af;
+  --border-color: #2d3748;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, ui-serif, serif;
+  
+  --color-primary: var(--primary-color);
+  --color-secondary: var(--secondary-color);
+  --color-secondary-container: var(--secondary-container-color);
+  --color-on-secondary-container: var(--on-secondary-container-color);
+
+  /* Dynamic Theme Overrides for standard utilities */
+  --color-white: var(--card-bg-color);
+  --color-gray-50: var(--app-bg-color);
+  --color-gray-100: var(--border-color);
+  --color-gray-200: var(--border-color);
+  --color-gray-300: var(--border-color);
+  
+  /* Text coloring overrides */
+  --color-gray-400: var(--text-muted-color);
+  --color-gray-500: var(--text-muted-color);
+  --color-gray-600: var(--text-muted-color);
+  --color-gray-700: var(--text-muted-color);
+  --color-gray-800: var(--text-main-color);
+  --color-gray-900: var(--text-main-color);
+}
+
+body {
+  background-color: var(--app-bg-color);
+  color: var(--text-main-color);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  
+  /* Native App UI feel */
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Prevent text highlighting when tapping app navigation & action buttons */
+button, 
+a, 
+[role="button"],
+.cursor-pointer {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Hide scrollbars for native look while keeping scroll functions */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

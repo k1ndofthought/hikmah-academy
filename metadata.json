@@ -1,0 +1,6 @@
+{
+  "name": "Hikmah Academy",
+  "description": "An interactive scholarly platform featuring curated academic articles, a multi-lingual Quran viewer (with Arabic text and Amharic translation), and an AI Scholar chat companion powered by Gemini.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
