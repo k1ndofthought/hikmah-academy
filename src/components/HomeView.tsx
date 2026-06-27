@@ -23,10 +23,12 @@ interface HomeViewProps {
     bookmarkedVersesCount: number;
   };
   articles?: any[];
+  scholars?: any;
 }
 
-export default function HomeView({ onNavigate, stats, articles }: HomeViewProps) {
+export default function HomeView({ onNavigate, stats, articles, scholars }: HomeViewProps) {
   const articlesList = articles || articlesData;
+  const scholarsMap = scholars || authorsData;
   // Beautiful comparative theology and research verses (15 in total)
   const slidingVerses = [
     {
@@ -172,7 +174,7 @@ export default function HomeView({ onNavigate, stats, articles }: HomeViewProps)
       icon: Users,
       color: 'from-emerald-700 to-teal-900',
       accentBg: 'bg-emerald-50 text-emerald-800',
-      badge: `${Object.keys(authorsData).length} Scholars`,
+      badge: `${Object.keys(scholarsMap).length} Scholars`,
       actionLabel: 'የምሁራንን ዝርዝር ለመመልከት'
     },
     {

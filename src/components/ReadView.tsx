@@ -38,6 +38,7 @@ interface ReadViewProps {
   initialBibleChapter?: number | null;
   initialBibleVerseNumber?: number | null;
   clearInitialBibleLink?: () => void;
+  scholars?: Record<string, ScholarAuthor>;
 }
 
 export interface BibleVersion {
@@ -68,7 +69,8 @@ export default function ReadView({
   initialBibleBookId,
   initialBibleChapter,
   initialBibleVerseNumber,
-  clearInitialBibleLink
+  clearInitialBibleLink,
+  scholars
 }: ReadViewProps) {
   // Modes: 'quran' | 'bible' | 'other'
   const [activeSubTab, setActiveSubTab] = useState<'quran' | 'bible' | 'other'>('quran');
@@ -178,7 +180,8 @@ export default function ReadView({
 
   // Collect all scholar books from authorsData
   const allScholarBooks: Array<{ book: ScholarBook; author: ScholarAuthor }> = [];
-  Object.values(authorsData).forEach((author) => {
+  const scholarsMap = scholars || authorsData;
+  Object.values(scholarsMap).forEach((author) => {
     if (author.books && author.books.length > 0) {
       author.books.forEach((book) => {
         allScholarBooks.push({ book, author });

@@ -29,16 +29,19 @@ interface AuthorProfileModalProps {
   onClose: () => void;
   onReadArticle: (article: Article) => void;
   articles?: Article[];
+  scholars?: Record<string, ScholarAuthor>;
 }
 
-export default function AuthorProfileModal({ authorName, onClose, onReadArticle, articles }: AuthorProfileModalProps) {
+export default function AuthorProfileModal({ authorName, onClose, onReadArticle, articles, scholars }: AuthorProfileModalProps) {
   const [activeBook, setActiveBook] = useState<ScholarBook | null>(null);
   const [activeBookPage, setActiveBookPage] = useState<number>(1);
 
   const articlesList = articles || articlesData;
 
+  const scholarsMap = scholars || authorsData;
+
   // Look up author in database. If not found, use a fallback
-  const author: ScholarAuthor = authorsData[authorName] || {
+  const author: ScholarAuthor = scholarsMap[authorName] || {
     name: authorName,
     title: "Scholarly Contributor",
     bio: `${authorName} is an esteemed writer and researcher contributing deep theological insights and comparative analyses to the Hikmah Academy.`,

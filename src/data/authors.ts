@@ -16,6 +16,7 @@ export interface ScholarAuthor {
   title: string;
   bio: string;
   image: string;
+  contributions?: string;
   socials: {
     youtube?: string;
     telegram?: string;

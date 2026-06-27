@@ -12,33 +12,36 @@ import {
   Sparkles,
   Users
 } from 'lucide-react';
-import { authorsData } from '../data/authors';
+import { ScholarAuthor, authorsData } from '../data/authors';
 import { articlesData } from '../data/articles';
 
 interface AuthorsViewProps {
   onSelectAuthor: (name: string) => void;
   articles?: any[];
+  scholars?: Record<string, ScholarAuthor>;
 }
 
-export default function AuthorsView({ onSelectAuthor, articles }: AuthorsViewProps) {
+export default function AuthorsView({ onSelectAuthor, articles, scholars }: AuthorsViewProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
+  const scholarsMap = scholars || authorsData;
+
   // Get list of authors
-  const authorsList = Object.values(authorsData);
+  const authorsList = Object.values(scholarsMap);
 
   const articlesListForAuthors = articles || articlesData;
 
   // Filter based on search query
   const filteredAuthors = authorsList.filter(author => {
     const nameMatch = author.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const titleMatch = author.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const bioMatch = author.bio.toLowerCase().includes(searchQuery.toLowerCase());
+    const titleMatch = (author.title || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const bioMatch = (author.bio || '').toLowerCase().includes(searchQuery.toLowerCase());
     return nameMatch || titleMatch || bioMatch;
   });
 
   // Calculate works count for each author helper
   const getAuthorWorksCount = (authorName: string) => {
-    const booksCount = authorsData[authorName]?.books?.length || 0;
+    const booksCount = scholarsMap[authorName]?.books?.length || 0;
     const scholarArticles = articlesListForAuthors.filter(
       a => a.author.toLowerCase().trim().includes(authorName.toLowerCase().trim()) || 
            authorName.toLowerCase().trim().includes(a.author.toLowerCase().trim())

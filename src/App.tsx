@@ -18,12 +18,14 @@ import AuthorProfileModal from './components/AuthorProfileModal';
 import AuthorsView from './components/AuthorsView';
 import { quranData } from './data/quran';
 import { articlesData } from './data/articles';
+import { ScholarAuthor, authorsData } from './data/authors';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'articles' | 'quran' | 'notes' | 'authors' | 'you'>('home');
   
   // Dynamic Articles state loaded from PostgreSQL (via FastAPI) with fallback
   const [articles, setArticles] = useState<Article[]>(articlesData);
+  const [scholars, setScholars] = useState<Record<string, ScholarAuthor>>(authorsData);
   const [apiUrl, setApiUrl] = useState<string>(() => {
     try {
       const saved = localStorage.getItem('hikmah_api_url');
@@ -38,12 +40,18 @@ export default function App() {
     setApiStatus('loading');
     try {
       const cleanUrl = urlToFetch.replace(/\/$/, "");
+      
+      // 1. Fetch Articles
       const res = await fetch(`${cleanUrl}/articles/`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json'
         }
       });
+      
+      let articlesOk = false;
+      let articlesList: Article[] = articlesData;
+
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
@@ -70,7 +78,6 @@ export default function App() {
           }));
 
           // Merge loaded articles with local articles to make sure local ones are retained if not in backend!
-          // This keeps the default beautiful curated articles alongside any newly uploaded ones!
           const merged = [...normalized];
           articlesData.forEach(localArt => {
             if (!merged.some(m => m.id === localArt.id)) {
@@ -78,11 +85,67 @@ export default function App() {
             }
           });
 
-          setArticles(merged);
-          setApiStatus('connected');
-          return true;
+          articlesList = merged;
+          articlesOk = true;
         }
       }
+
+      // 2. Fetch Ustazs & Books
+      let scholarsOk = false;
+      try {
+        const resUstazs = await fetch(`${cleanUrl}/ustazs/`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        if (resUstazs.ok) {
+          const ustazsDataList = await resUstazs.json();
+          if (Array.isArray(ustazsDataList)) {
+            const normalizedUstazs: Record<string, ScholarAuthor> = {};
+            ustazsDataList.forEach((item: any) => {
+              normalizedUstazs[item.name] = {
+                name: item.name,
+                title: item.title || 'Scholarly Contributor',
+                bio: item.bio || '',
+                image: item.image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+                contributions: item.contributions || '',
+                socials: {
+                  youtube: item.youtube || undefined,
+                  telegram: item.telegram || undefined,
+                  website: item.website || undefined,
+                  facebook: item.facebook || undefined
+                },
+                books: item.books ? item.books.map((b: any) => ({
+                  title: b.title || '',
+                  description: b.description || '',
+                  pdfUrl: b.pdf_url || b.pdfUrl || '',
+                  pagesCount: b.pages_count || b.pagesCount || 1,
+                  content: b.content || ''
+                })) : []
+              };
+            });
+
+            // Merge loaded scholars with local ones
+            const mergedScholars = { ...authorsData };
+            Object.keys(normalizedUstazs).forEach((key) => {
+              mergedScholars[key] = normalizedUstazs[key];
+            });
+
+            setScholars(mergedScholars);
+            scholarsOk = true;
+          }
+        }
+      } catch (ustazError) {
+        console.warn("Could not fetch Ustazs from backend:", ustazError);
+      }
+
+      if (articlesOk) {
+        setArticles(articlesList);
+        setApiStatus('connected');
+        return true;
+      }
+      
       setApiStatus('error');
       return false;
     } catch (e) {
@@ -309,6 +372,7 @@ export default function App() {
                   bookmarkedVersesCount: bookmarkedVerses.length
                 }}
                 articles={articles}
+                scholars={scholars}
               />
             )}
 
@@ -343,6 +407,7 @@ export default function App() {
                   setDeepLinkBibleChapter(null);
                   setDeepLinkBibleVerseNumber(null);
                 }}
+                scholars={scholars}
               />
             )}
 
@@ -387,6 +452,7 @@ export default function App() {
               <AuthorsView 
                 onSelectAuthor={(name) => setSelectedAuthorName(name)}
                 articles={articles}
+                scholars={scholars}
               />
             )}
           </motion.div>
@@ -413,6 +479,7 @@ export default function App() {
           onClose={() => setSelectedAuthorName(null)}
           onReadArticle={(art) => setSelectedArticle(art)}
           articles={articles}
+          scholars={scholars}
         />
       )}
 
