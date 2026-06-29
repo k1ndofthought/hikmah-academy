@@ -9,7 +9,7 @@ This project is engineered as a cross-platform solution, utilizing a **React + T
 ## 🌟 Key Features
 
 ### 1. Interactive Comparative Dashboard
-- **Scripture Alignment**: Dynamic side-by-side comparative views of Biblical and Quranic verses.
+- **Scripture Alignment**: Dynamic side-by-side comparative views.
 - **Micro-Animations**: Elegant transitions powered by `Framer Motion` for a premium, non-distracting visual user experience.
 - **Multilingual Support**: Real-time localization toggles (English & Amharic translations).
 
